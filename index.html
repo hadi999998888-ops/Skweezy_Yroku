@@ -328,6 +328,8 @@ footer{text-align:center;color:#5d6273;font-size:10px;letter-spacing:2px;margin-
 (function(){
   "use strict";
 
+  const $ = id => document.getElementById(id);
+
   function playSound(type) {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -401,49 +403,48 @@ footer{text-align:center;color:#5d6273;font-size:10px;letter-spacing:2px;margin-
     "классный час":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, "#b8ff36"]
   };
 
-  let selected=new Date().getDay()-1;
-  if(selected<0||selected>4)selected=0;
+  let selected = new Date().getDay() - 1;
+  if(selected < 0 || selected > 4) selected = 0;
 
-  const $=id=>document.getElementById(id);
-  const mins=t=>{const p=t.split(":").map(Number);return p[0]*60+p[1]};
+  const mins = t => { const p = t.split(":").map(Number); return p[0]*60 + p[1]; };
 
   function monday(){
-    const d=new Date();
-    const w=d.getDay();
-    d.setDate(d.getDate()+(w===0?-6:1-w));
+    const d = new Date();
+    const w = d.getDay();
+    d.setDate(d.getDate() + (w === 0 ? -6 : 1 - w));
     d.setHours(0,0,0,0);
     return d;
   }
 
   function dateFor(i){
-    const d=monday();
-    d.setDate(d.getDate()+i);
+    const d = monday();
+    d.setDate(d.getDate() + i);
     return d.getDate();
   }
 
   function updateDate(){
-    const d=new Date();
-    $("date").textContent=d.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"});
-    $("weekday").textContent=d.toLocaleDateString("ru-RU",{weekday:"long"});
+    const d = new Date();
+    $("date").textContent = d.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"});
+    $("weekday").textContent = d.toLocaleDateString("ru-RU",{weekday:"long"});
   }
 
   function renderDays(){
-    const root=$("days");
+    const root = $("days");
     root.replaceChildren();
 
     DAYS.forEach((day,i)=>{
-      const b=document.createElement("button");
-      b.className="day"+(i===selected?" active":"");
-      const n=document.createElement("div");
-      n.className="day-name";
-      n.textContent=day.short;
-      const d=document.createElement("div");
-      d.className="day-date";
-      d.textContent=dateFor(i);
-      b.append(n,d);
-      b.addEventListener("click",()=>{
-        if(selected!==i) {
-          selected=i;
+      const b = document.createElement("button");
+      b.className = "day" + (i === selected ? " active" : "");
+      const n = document.createElement("div");
+      n.className = "day-name";
+      n.textContent = day.short;
+      const d = document.createElement("div");
+      d.className = "day-date";
+      d.textContent = dateFor(i);
+      b.append(n, d);
+      b.addEventListener("click", ()=>{
+        if(selected !== i) {
+          selected = i;
           playSound('select');
           renderDays();
           renderLessons();
@@ -454,32 +455,27 @@ footer{text-align:center;color:#5d6273;font-size:10px;letter-spacing:2px;margin-
   }
 
   function renderLessons(){
-    const root=$("lessons");
+    const root = $("lessons");
     root.replaceChildren();
 
-    const items=SCHEDULE[selected]||[];
-    $("dayTitle").textContent=DAYS[selected].name;
-    $("lessonCount").textContent=items.length+" уроков";
+    const items = SCHEDULE[selected] || [];
+    $("dayTitle").textContent = DAYS[selected].name;
+    $("lessonCount").textContent = items.length + " уроков";
 
-    const now=new Date();
-    const isToday=now.getDay()===selected+1;
-    const current=now.getHours()*60+now.getMinutes();
-    let totalMinutes=0;
+    const now = new Date();
+    const isToday = now.getDay() === selected + 1;
+    const current = now.getHours() * 60 + now.getMinutes();
+    let totalMinutes = 0;
 
-    items.forEach((subject,i)=>{
-      const t=TIMES[i]||["",""];
-      if(t[0]&&t[1])totalMinutes+=mins(t[1])-mins(t[0]);
+    items.forEach((subject, i)=>{
+      const t = TIMES[i] || ["",""];
+      if(t[0] && t[1]) totalMinutes += mins(t[1]) - mins(t[0]);
 
-      const pair=ICONS[subject.toLowerCase()]||[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,"#b8ff36"];
-      const active=isToday&&t[0]&&current>=mins(t[0])&&current<mins(t[1]);
-      const finished=isToday&&t[1]&&current>=mins(t[1]);
+      const pair = ICONS[subject.toLowerCase()] || [`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`, "#b8ff36"];
+      const active = isToday && t[0] && current >= mins(t[0]) && current < mins(t[1]);
+      const finished = isToday && t[1] && current >= mins(t[1]);
 
-      const card=document.createElement("article");
-      card.className="lesson"+(active?" now":"");
-      card.style.setProperty("--c",pair[1]);
-      card.style.animationDelay=Math.min(i*40,240)+"ms";
-
-      const time=document.createElement("div");
-      time.className="time";
-      const start=document.createElement("strong");
-      start.textCo
+      const card = document.createElement("article");
+      card.className = "lesson" + (active ? " now" : "");
+      card.style.setProperty("--c", pair[1]);
+      card.style.animationDelay = Math.min(
