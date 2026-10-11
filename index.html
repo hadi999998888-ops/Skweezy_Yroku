@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090a10">
+<title>Skweezy — 6Б</title>
+
+<style>
+:root{
+  --bg:#090a10;
+  --panel:#12141e;
+  --panel2:#191c29;
+  --white:#f6f6fb;
+  --muted:#898da2;
+  --accent:#b8ff36;
+  --line:rgba(255, 255, 255, 0.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--white);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:none}
+button:focus-visible{outline:2px solid var(--accent)}
+
+.bg-glow{
+  position:fixed;z-index:-1;pointer-events:none;
+  width:320px;height:320px;border-radius:50%;
+  background:var(--accent);filter:blur(160px);opacity:.12;
+  top:-120px;right:-80px;
+  animation:floatGlow 8s ease-in-out infinite alternate;
+}
+@keyframes floatGlow{
+  from{transform:translate(0, 0) scale(1);}
+  to{transform:translate(-30px, 40px) scale(1.1);}
+}
+
+.wrap{max-width:850px;margin:auto;padding:22px 16px 45px}
+
+/* ЗАГРУЗКА */
+#loader{
+  position:fixed;inset:0;z-index:999;
+  background:var(--bg);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .5s cubic-bezier(0.4, 0, 0.2, 1),visibility .5s;
+}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.load-logo-wrap{
+  width:90px;height:90px;border-radius:28px;
+  background:var(--panel2);border:1px solid var(--line);
+  display:grid;place-items:center;overflow:hidden;
+  box-shadow:0 10px 40px rgba(184,255,54,0.15);
+  animation:pulse 1.2s ease-in-out infinite alternate;
+}
+.load-logo-wrap img{width:100%;height:100%;object-fit:cover}
+@keyframes pulse{to{transform:scale(1.05);box-shadow:0 15px 50px rgba(184,255,54,0.25)}}
+
+.load-name{font-size:26px;font-weight:950;letter-spacing:6px;margin-top:24px;background:linear-gradient(90deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.load-sub{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:1px}
+.load-line{width:140px;height:3px;background:var(--panel2);border-radius:5px;margin-top:28px;overflow:hidden}
+.load-line:after{
+  content:"";display:block;width:40%;height:100%;
+  background:var(--accent);animation:loading .9s infinite ease-in-out;
+  border-radius:5px;
+}
+@keyframes loading{from{transform:translateX(-100%)}to{transform:translateX(350%)} }
+
+/* ШАПКА */
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-logo{
+  width:48px;height:48px;border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);background:var(--panel2);
+  display:grid;place-items:center;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-name{font-size:18px;font-weight:950;letter-spacing:1.5px}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
+.badge{
+  color:var(--accent);font-size:11px;font-weight:800;
+  border:1px solid rgba(184,255,54,0.25);background:rgba(184,255,54,0.06);
+  border-radius:30px;padding:9px 14px;display:flex;align-items:center;gap:6px;
+  box-shadow:0 0 20px rgba(184,255,54,0.08);
+}
+.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HERO */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg, #b8ff36 0%, #9be322 100%);
+  color:#11140b;
+  border-radius:28px;padding:32px 28px;
+  box-shadow:0 20px 50px rgba(184,255,54,0.2);
+}
+.hero-watermark{
+  position:absolute;right:-10px;top:-40px;
+  font-size:240px;line-height:1;font-weight:1000;
+  color:rgba(16,21,10,0.04);pointer-events:none;user-select:none;
+}
+.hero-label{
+  font-size:10px;letter-spacing:2px;font-weight:900;
+  background:rgba(17,20,11,0.08);border:1px solid rgba(17,20,11,0.12);
+  border-radius:30px;padding:8px 12px;display:inline-flex;align-items:center;gap:6px;
+}
+.hero h1{
+  position:relative;z-index:1;
+  font-size:clamp(40px,9vw,62px);
+  line-height:1;letter-spacing:-2.5px;margin:20px 0 12px;
+  font-weight:1000;
+}
+.hero p{font-size:13px;line-height:1.6;max-width:340px;color:#28301b;margin:0;font-weight:500}
+.hero-bottom{
+  position:relative;z-index:1;display:flex;
+  justify-content:space-between;align-items:flex-end;gap:10px;margin-top:28px;
+}
+.date{font-size:13px;font-weight:900}
+.weekday{font-size:11px;margin-top:4px;opacity:.75;font-weight:600}
+.class-tag{
+  border-radius:14px;background:#10140b;color:var(--accent);
+  padding:10px 14px;font-size:12px;font-weight:900;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* СТАТИСТИКА */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 32px}
+.stat{
+  padding:18px 14px;border:1px solid var(--line);
+  border-radius:20px;background:var(--panel);
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  position:relative;overflow:hidden;
+}
+.stat:hover{transform:translateY(-4px);border-color:rgba(184,255,54,0.3);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.stat-icon{
+  width:36px;height:36px;border-radius:12px;
+  background:var(--panel2);display:grid;place-items:center;
+  color:var(--accent);margin-bottom:10px;
+}
+.stat-icon svg{width:18px;height:18px}
+.stat-number{font-size:24px;font-weight:950;letter-spacing:-1px}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* ДНИ */
+.heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.heading h2{font-size:22px;letter-spacing:-.7px;margin:0}
+.heading p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.heading-icon{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;background:var(--panel2);
+  color:var(--accent);border:1px solid var(--line);
+}
+.heading-icon svg{width:20px;height:20px}
+
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:22px}
+.day{
+  border:1px solid var(--line);border-radius:16px;
+  background:var(--panel);padding:14px 4px;
+  transition:all .25s cubic-bezier(0.4,0,0.2,1);text-align:center;
+}
+.day:hover{border-color:rgba(184,255,54,0.2);transform:translateY(-2px)}
+.day:active{transform:scale(.95)}
+.day.active{background:var(--accent);color:#10130a;border-color:var(--accent);box-shadow:0 8px 25px rgba(184,255,54,0.25)}
+.day-name{font-size:12px;font-weight:900}
+.day-date{font-size:10px;color:var(--muted);margin-top:6px;font-weight:700}
+.day.active .day-date{color:#2e3a17}
+
+/* УРОКИ */
+.schedule-top{display:flex;justify-content:space-between;align-items:center;margin:6px 2px 14px}
+.schedule-title{font-size:16px;font-weight:900}
+.count{font-size:11px;color:var(--muted);font-weight:600}
+.lessons{display:grid;gap:12px}
+.lesson{
+  --c:#b8ff36;
+  display:grid;
+  grid-template-columns:55px 3px 44px minmax(0,1fr) 22px;
+  gap:12px;align-items:center;
+  background:linear-gradient(110deg,#141722,#0f111a);
+  border:1px solid var(--line);border-radius:20px;
+  padding:16px 12px;min-width:0;
+  animation:appear .4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:0 4px 20px rgba(0,0,0,0.2);
+}
+.lesson:hover{border-color:rgba(184,255,54,0.4);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.lesson.now{
+  border-color:rgba(184,255,54,0.7);
+  background:linear-gradient(110deg,#18221a,#121813);
+  box-shadow:0 0 30px rgba(184,255,54,0.12);
+}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.time{text-align:center}
+.time strong{font-size:13px;display:block;font-weight:900}
+.time small{display:block;font-size:10px;color:var(--muted);margin-top:4px;font-weight:600}
+
+.bar{width:3px;height:46px;background:var(--c);border-radius:8px;box-shadow:0 0 10px var(--c)}
+
+.subject-icon{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;
+  background:color-mix(in srgb,var(--c) 12%,transparent);
+  color:var(--c);
+  border:1px solid color-mix(in srgb,var(--c) 25%,transparent);
+}
+.subject-icon svg{width:22px;height:22px}
+
+.subject-name{font-size:13px;font-weight:900;line-height:1.4;overflow-wrap:anywhere}
+.subject-sub{font-size:10px;color:var(--muted);margin-top:4px;font-weight:600}
+.status{font-size:9px;font-weight:900;color:var(--accent);margin-top:6px;letter-spacing:.5px}
+.num{font-size:11px;color:#555b6d;text-align:center;font-weight:900}
+
+.empty{
+  padding:45px 15px;text-align:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:20px;
+}
+.empty-icon{
+  width:50px;height:50px;border-radius:16px;background:var(--panel2);
+  display:grid;place-items:center;color:var(--muted);margin:0 auto 14px;
+  border:1px solid var(--line);
+}
+.empty-icon svg{width:24px;height:24px}
+.empty p{font-size:12px;color:var(--muted);margin:0;font-weight:600}
+
+.note{
+  margin-top:28px;padding:20px;
+  border:1px solid var(--line);border-radius:22px;background:var(--panel);
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+.note-title{font-weight:900;font-size:13px;display:flex;align-items:center;gap:8px}
+.note p{font-size:11px;color:var(--muted);line-height:1.8;margin:8px 0 0;font-weight:500}
+
+footer{text-align:center;color:#5d6273;font-size:10px;letter-spacing:2px;margin-top:30px;font-weight:700}
+
+@media(min-width:650px){
+  .wrap{padding-top:35px}
+  .hero{padding:38px}
+  .lesson{grid-template-columns:70px 4px 50px minmax(0,1fr) 28px;padding:18px}
+  .subject-icon{width:50px;height:50px}
+  .subject-name{font-size:14px}
+}
+@media(max-width:370px){
+  .wrap{padding:14px 10px}
+  .badge{font-size:10px;padding:8px 10px}
+  .stats{gap:8px}
+  .stat{padding:14px 10px}
+  .stat-number{font-size:21px}
+  .lesson{grid-template-columns:48px 3px 36px minmax(0,1fr) 16px;gap:8px;padding:12px 8px}
+  .subject-icon{width:36px;height:36px}
+  .subject-name{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+  <div class="load-logo-wrap">
+    <img src="Logo.jpg" alt="Logo" onerror="this.style.display='none'">
+  </div>
+  <div class="load-name">SKWEEZY</div>
+  <div class="load-sub">РАСПИСАНИЕ КЛАССА 6Б</div>
+  <div class="load-line"></div>
+</div>
+
+<div class="bg-glow"></div>
+
+<main class="wrap" id="app">
+  <header>
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="Logo.jpg" alt="Logo" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <div class="brand-name">SKWEEZY</div>
+        <div class="brand-sub">SCHOOL SCHEDULE</div>
+      </div>
+    </div>
+    <div class="badge">
+      <div class="badge-dot"></div>
+      6Б CLASS
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-watermark">6Б</div>
+    <div class="hero-label">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      ТВОЁ РАСПИСАНИЕ
+    </div>
+    <h1>LESSONS.<br>EVERY DAY.</h1>
+    <p>Вся школьная неделя. Все уроки.<br>Ничего лишнего — только Skweezy.</p>
+    <div class="hero-bottom">
+      <div>
+        <div class="date" id="date">Загрузка даты...</div>
+        <div class="weekday" id="weekday">Школьная неделя</div>
+      </div>
+      <div class="class-tag">6Б / 2026</div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
+      </div>
+      <div class="stat-number" id="todayCount">0</div>
+      <div class="stat-label">Уроков сегодня</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="stat-number" id="studyTime">0 ч</div>
+      <div class="stat-label">Время учёбы</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="stat-number" id="weekCount">0</div>
+      <div class="stat-label">За неделю</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="heading">
+      <div>
+        <h2>Расписание</h2>
+        <p>Выбери нужный день</p>
+      </div>
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+    </div>
+
+    <div class="days" id="days"></div>
+
+    <div class="schedule-top">
+      <div class="schedule-title" id="dayTitle">Понедельник</div>
+      <div class="count" id="lessonCount">0 уроков</div>
+    </div>
+
+    <div class="lessons" id="lessons"></div>
+  </section>
+
+  <section class="note">
+    <div class="note-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      SKWEEZY / 6Б
+    </div>
+    <p>Твоё расписание всегда рядом. Страница работает офлайн — просто открой этот файл в браузере вместе с вашим логотипом Logo.jpg в одной папке.</p>
+  </section>
+
+  <footer>SKWEEZY · SCHOOL SYSTEM</footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // Звуковые эффекты через Web Audio API
+  function playSound(type) {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(550, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.04);
+      } else if (type === 'select') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.setValueAtTime(660, ctx.currentTime + 0.06);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.12);
+      }
+    } catch(e) {}
+  }
+
+  const DAYS=[
+    {name:"Понедельник",short:"ПН"},
+    {name:"Вторник",short:"ВТ"},
+    {name:"Среда",short:"СР"},
+    {name:"Четверг",short:"ЧТ"},
+    {name:"Пятница",short:"ПТ"}
+  ];
+
+  const TIMES=[
+    ["13:30","14:10"],
+    ["14:15","14:55"],
+    ["15:00","15:40"],
+    ["15:50","16:30"],
+    ["16:35","17:15"],
+    ["17:20","18:00"],
+    ["18:05","18:45"]
+  ];
+
+  const SCHEDULE=[
+    ["Классный час","Литература","Английский язык","Русский язык","Физкультура","История","Литература"],
+    ["Математика","Русский язык","Литература","Обществознание","История","География","Физкультура"],
+    ["Математика","Английский язык","Русский язык","Алгебра","Английский язык","Биология","Информатика"],
+    ["Технология","Математика","Русский язык","История","Английский язык","История","Русский язык"],
+    ["Информатика","Математика","Обществознание","Английский язык","Русский язык","Литература","Английский язык"]
+  ];
+
+  const ICONS={
+    "математика":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M9 7h6M9 11h6M12 14v4M10 16h4"/></svg>`, "#b8ff36"],
+    "алгебра":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12h8M12 8v8"/></svg>`, "#b8ff36"],
+    "геометрия":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 21 18-18M3 3l18 18M9 3v18"/></svg>`, "#b8ff36"],
+    "русский язык":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`, "#ff7f9f"],
+    "литература":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`, "#e9b16c"],
+    "английский язык":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`, "#64d4ff"],
+    "история":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>`, "#e9b16c"],
+    "география":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>`, "#62dfb0"],
+    "биология":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.4 19 2c2 2 .5 3.5-.6 9.2A7 7 0 0 1 11 20zM2 21c0-3 1.85-5.36 5-6"/></svg>`, "#62dfb0"],
+    "информатика":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`, "#8c9bff"],
+    "физкультура":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/></svg>`, "#ff9e71"],
+    "технология":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`, "#d8b7ff"],
+    "обществознание":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`, "#64d4ff"],
+    "классный час":[`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, "#b8ff36"]
+  };
+
+  let selected=new Date().getDay()-1;
+  if(selected<0||selected>4)selected=0;
+
+  const $=id=>document.getElementById(id);
+  const mins=t=>{const p=t.split(":").map(Number);return p[0]*60+p[1]};
+
+  function monday(){
+    const d=new Date();
+    const w=d.getDay();
+    d.setDate(d.getDate()+(w===0?-6:1-w));
+    d.setHours(0,0,0,0);
+    return d;
+  }
+
+  function dateFor(i){
+    const d=monday();
+    d.setDate(d.getDate()+i);
+    return d.getDate();
+  }
+
+  function updateDate(){
+    const d=new Date();
+    $("date").textContent=d.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"});
+    $("weekday").textContent=d.toLocaleDateString("ru-RU",{weekday:"long"});
+  }
+
+  function renderDays(){
+    const root=$("days");
+    root.replaceChildren();
+
+    DAYS.forEach((day,i)=>{
+      const b=document.createElement("button");
+      b.className="day"+(i===selected?" active":"");
+      const n=document.createElement("div");
+  
